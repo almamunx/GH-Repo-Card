@@ -19,7 +19,7 @@
 
         .container {
             width: 100%;
-            max-width: 1180px;
+            max-width: 1080px;
             margin-right: auto;
             margin-left: auto;
         }
@@ -47,6 +47,41 @@
         .fw-normal {
             font-weight: normal;
         }
+
+        .fw-bold {
+            font-weight: bold;
+        }
+
+        #form-input {
+            display: block;
+            width: 100%;
+            padding: 0.375rem 0.75rem;
+            font-size: 1rem;
+            font-weight: 400;
+            line-height: 1.5;
+            color: #212529;
+            background-color: #fff;
+            background-clip: padding-box;
+            border: 1px solid #ced4da;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            border-top-left-radius: 6px;
+            border-bottom-left-radius: 6px;
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+            max-width: 320px;
+            font-size: 20px;
+        }
+
+        #submit {
+            border: 1px solid #ced4da;
+            background-color: #ced4da;
+            color: #494f54;
+            font-size: 24px;
+            border-top-right-radius: 6px;
+            border-bottom-right-radius: 6px;
+            cursor: pointer;
+        }
     </style>
 </head>
 
@@ -61,13 +96,40 @@
             <h1 class="text-center">Github Repository Card</h1>
             <br>
             <h2 class="fw-normal text-center">Display Github repositories on your website</h3>
-            <br>
-            <br>
-            <div style="display: flex; justify-content: center;">
-                <div style="min-width: 360px;">
-                    <div data-repo="almamunx/gh-repo-card"></div>
+                <br>
+                <br>
+                <div style="display: flex; justify-content: center; height: 120px;">
+                    <div style="min-width: 360px;">
+                        <div data-repo="almamunx/gh-repo-card"></div>
+                    </div>
                 </div>
-            </div>
+
+                <br>
+                <h2 class="text-center" style="font-size: 32px; padding-bottom: 24px;">Here is a demo</h2>
+                <div style="display: flex; justify-content: center; padding-bottom: 20px;">
+                    <input type="text" name="repo" placeholder="user/repo" id="form-input">
+                    <button id="submit" onclick="generateCard()">Generate</button>
+                </div>
+                <div style="display: flex; justify-content: center; min-height: 40px; padding-bottom: 40px;">
+                    <div style="min-width: 360px;">
+                        <div id="demo-card"></div>
+                    </div>
+                </div>
+
+                <br>
+                <h2 class="text-center" style="font-size: 32px; padding-bottom: 24px;">Usage</h2>
+
+                <div style="border-radius: 8px; background-color: #f3f4f5; padding-top: 4px;">
+                    <pre>
+                        <code>
+                            &lt;!-- Source --&gt;
+                            &lt;script src="https://almamunx.github.io/GH-Repo-Card/card.js"&gt;&lt;/script&gt;
+                            <br>
+                            &lt;!-- Where you want to display repository card --&gt;
+                            &lt;div data-repo="username/repository"&gt;&lt;/div&gt;
+                        </code>
+                    </pre>
+                </div>
         </div>
     </main>
     <footer>
@@ -75,7 +137,14 @@
     </footer>
 
 
-    <script src="gh-repo-card.js"></script>
+    <script src="card.js"></script>
+    <script>
+        async function generateCard() {
+            const repo = document.getElementById("form-input").value;
+            const card = await GetRepoAsync(repo);
+            document.getElementById("demo-card").innerHTML = card;
+        }
+    </script>
 </body>
 
 </html>

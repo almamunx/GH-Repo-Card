@@ -1,21 +1,22 @@
-window.addEventListener('DOMContentLoaded', async function () {
+
+async function GetRepoAsync(name) {
+
     const colors = await fetch('https://raw.githubusercontent.com/ozh/github-colors/master/colors.json').then((response) => response.json());
     const emojis = await fetch('https://api.github.com/emojis').then((response) => response.json());
 
-    async function GetRepoAsync(name) {
-        const repo = await fetch(`https://api.github.com/repos/${name}`)
-            .then((response) => response.json());
+    const repo = await fetch(`https://api.github.com/repos/${name}`)
+        .then((response) => response.json());
 
-        if (repo.description)
-            await [...repo.description.matchAll(/:\w+:/g)].forEach((em) => {
-                const e_name = em[0].substring(1, em[0].length - 1);
-                const e_url = emojis[e_name];
-                const emoji = `<img src="${e_url}" height="14">`;
-                repo.description = repo.description.replace(em[0], emoji);
-            });
+    if (repo.description)
+        await [...repo.description.matchAll(/:\w+:/g)].forEach((em) => {
+            const e_name = em[0].substring(1, em[0].length - 1);
+            const e_url = emojis[e_name];
+            const emoji = `<img src="${e_url}" height="14">`;
+            repo.description = repo.description.replace(em[0], emoji);
+        });
 
-        const forks =
-            `<a href="https://github.com/${repo.full_name}/forks"
+    const forks =
+        `<a href="https://github.com/${repo.full_name}/forks"
                    style="color: currentColor !important; text-decoration:none; margin-left:16px">
                    <svg style="fill: currentColor !important; vertical-align: text-bottom;" aria-label="forks"
                        role="img" height="16" viewBox="0 0 16 16" version="1.1" width="16"
@@ -27,8 +28,8 @@ window.addEventListener('DOMContentLoaded', async function () {
                    ${Math.abs(repo.forks) > 999 ? Math.sign(repo.forks) * ((Math.abs(repo.forks) / 1000).toFixed(1)) + 'k' : Math.sign(repo.forks) * Math.abs(repo.forks)}
              </a>`
 
-        const stars =
-            `<a href="https://github.com/${repo.full_name}/stargazers"
+    const stars =
+        `<a href="https://github.com/${repo.full_name}/stargazers"
                  style="color: currentColor !important; text-decoration:none">
                  <svg style="fill: currentColor !important; vertical-align: text-bottom;" aria-label="stars"
                      role="img" height="16" viewBox="0 0 16 16" version="1.1" width="16"
@@ -40,7 +41,7 @@ window.addEventListener('DOMContentLoaded', async function () {
                 ${Math.abs(repo.watchers) > 999 ? Math.sign(repo.watchers) * ((Math.abs(repo.watchers) / 1000).toFixed(1)) + 'k' : Math.sign(repo.watchers) * Math.abs(repo.watchers)}
              </a>`
 
-        const repo_card = `
+    const repo_card = `
                     <div
                         style="display:flex; color: #656d76 !important; height: 100%; border: 1px solid #d0d7de; border-radius: 6px; padding: 16px !important; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji; font-size: 14px">
                         <div>
@@ -78,8 +79,10 @@ window.addEventListener('DOMContentLoaded', async function () {
                         </div>
                     </div>
 `
-        return repo_card;
-    }
+    return repo_card;
+}
+
+window.addEventListener('DOMContentLoaded', async function () {
     document.querySelectorAll('[data-repo]').forEach(async (elem) => {
         const re_address = elem.dataset.repo.replace(/\s\s+/g, ' ');
         const card = await GetRepoAsync(re_address)
